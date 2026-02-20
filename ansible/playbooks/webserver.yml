@@ -1,0 +1,12 @@
+# ansible/playbooks/webserver.yml
+# - hosts: localhost
+#   connection: local
+#   tasks:
+#     - name: Copy index.html into container
+#       command: docker cp files/index.html nginx_server:/usr/share/nginx/html/index.html
+
+- name: Copy index.html into container
+  hosts: localhost
+  tasks:
+    - name: Copy index.html into nginx container
+      command: docker cp ../../files/index.html nginx_server:/usr/share/nginx/html/index.html

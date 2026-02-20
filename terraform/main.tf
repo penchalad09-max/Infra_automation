@@ -1,0 +1,41 @@
+# terraform/main.tf
+/*
+provider "docker" {}
+
+resource "docker_container" "nginx" {
+  image = "nginx:latest"
+  name  = "nginx_server"
+  ports {
+    internal = 80
+    external = 8080
+  }
+}
+
+output "nginx_ip" {
+  value = "localhost:8080"
+}
+*/
+
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "docker" {}
+
+resource "docker_container" "nginx" {
+  image = "nginx:latest"
+  name  = "nginx_server"
+  ports {
+    internal = 80
+    external = 8080
+  }
+}
+
+output "nginx_ip" {
+  value = "localhost:8080"
+}

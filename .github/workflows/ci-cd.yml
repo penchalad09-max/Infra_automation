@@ -1,0 +1,54 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init & Apply
+      run: |
+        cd terraform
+        terraform init
+        terraform apply -auto-approve
+
+    - name: Install Ansible
+      run: sudo apt-get update && sudo apt-get install -y ansible
+
+    - name: Run Ansible Playbook
+      run: |
+        cd ansible
+        ansible-playbook -i inventory playbooks/webserver.yml
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+
+    - name: Validate Webserver
+      run: |
+        cd python
+        python validate_webserver.py
+
+    - name: Run Tests
+      run: pytest tests/
+
+    - name: Terraform Destroy
+      if: always()
+      run: |
+        cd terraform
+        terraform destroy -auto-approve
