@@ -1,15 +1,15 @@
 # python/validate_webserver.py
 import requests
 
-def validate_webserver(url="http://localhost:8080"):
+def check_webserver():
     try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            print("✅ Web server is running and serving content.")
-        else:
-            print(f"⚠️ Unexpected status code: {response.status_code}")
-    except Exception as e:
-        print(f"❌ Validation failed: {e}")
+        response = requests.get("http://localhost:8080")
+        return response.status_code == 200 and "Hello from Ansible!" in response.text
+    except Exception:
+        return False
 
 if __name__ == "__main__":
-    validate_webserver()
+    if check_webserver():
+        print("✅ Web server is running and serving content.")
+    else:
+        print("❌ Web server validation failed.")

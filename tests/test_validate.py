@@ -1,11 +1,7 @@
-import sys
-import os
-
-# Add the python folder to sys.path
+import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "python"))
 
 import validate_webserver
 
 def test_webserver_running():
-    result = validate_webserver.check_webserver()
-    assert result is True
+    assert validate_webserver.check_webserver() is True
